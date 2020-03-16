@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Tuple, cast
 from ..constant import *
 from ..predef import *
 from ..pure_utils import *
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -193,3 +194,12 @@ class ProgramUtils:
                        '请您今天手动填报正常数据，从明天开始再自动填报。')
 
         raise RuntimeError('\n'.join(err_msg))
+
+    def check_address(self, data: Dict[str, Any]) -> str:
+        keys = data.keys()
+        address = data.get('address')
+        geo = data.get('geo_api_info')
+        if address and '"info":"SUCCESS"' in geo:
+            return '\n'+data.get('address') + '\n'+'\n'.join(re.findall(r'"message":"(.*?)"', geo))
+        else:
+            raise RuntimeError('\n 定位地址有问题，请手动打卡')
