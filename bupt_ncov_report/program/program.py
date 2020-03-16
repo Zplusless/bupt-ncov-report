@@ -158,7 +158,7 @@ class Program:
             self._prog_util.check_data_sick(verified_data)
              
         # 检查address是否正常
-        add_status = self._prog_util.check_address(post_data)
+        addr_status = self._prog_util.check_address(post_data)
 
         # 最终 POST
         report_api_res = self._sess.post(
@@ -173,7 +173,7 @@ class Program:
         if report_api_res.status_code != 200:
             raise RuntimeError(f'上报 API 返回的 HTTP 状态码（{report_api_res.status_code}）不是 200。')
 
-        return report_api_res.text + add_status
+        return report_api_res.text + addr_status
 
     def main(self) -> str:
         """
